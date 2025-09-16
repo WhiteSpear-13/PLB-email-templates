@@ -105,7 +105,7 @@
     );
 
     const generalBody = encodeURIComponent(
-      `Good day, PLB OPS Team!\n\nHere are the details of my concern:\nStakeholder Involved: [account/client name]\nDetails: [Brief explanation]\nWhen/Where observed: [date and location]\nSteps tried: [if any]\nAttachments: [if any]\n\nThank you!\n\nBest,\n[Name here]`
+      `Good day, PLB OPS Team!\n\nHere are the details of my concern:\nStakeholder Involved: [account/client name]\nDetails: [Brief explanation]\nWhen/Where observed: [date and location]\nSteps tried: [if any]\nAttachments: [if any]\n\nThank you!
     );
 
     // Links
@@ -127,9 +127,10 @@
     document.getElementById("general-mobile").href =
       `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=Please%20replace%20this%20subject%20line&body=${generalBody}`;
     document.getElementById("general-desktop").href =
-      `mailto:plb-support@locq.com?subject=Please%20replace%20this%20subject%20line&body=${generalBody}`;
+      `mailto:plb-support@locq.com?subject=Please%20replace%20this%20subject%20line%20${today}&body=${generalBody}`;
   </script>
 </body>
 </html>
+
 
 
