@@ -41,12 +41,24 @@
       background: #007bff;
       color: white;
     }
+    input {
+      padding: 8px;
+      font-size: 1rem;
+      width: 300px;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
   </style>
 </head>
 
 <body>
-  <h1> PLB Email Templates</h1>
-  <p>Click the buttons below to open a ready-to-use email in mobile or Gmail in your web browser.</p>
+  <h1>📧 PLB Email Templates</h1>
+  <p>Enter Business Account Name (required for subject line):</p>
+
+  <input type="text" id="accountName" placeholder="Enter Business Account Name">
+
+  <p>Click the buttons below to open the email template.</p>
 
   <!-- Voiding Section -->
   <div class="template">
@@ -85,18 +97,16 @@
   </div>
 
   <script>
-    // Format date MMDDYYYY
     function getToday() {
       const d = new Date();
-      const mm = String(d.getMonth() + 1).padStart(2, "0");
-      const dd = String(d.getDate()).padStart(2, "0");
-      const yyyy = d.getFullYear();
-      return mm + dd + yyyy;
+      return String(d.getMonth() + 1).padStart(2, "0") +
+             String(d.getDate()).padStart(2, "0") +
+             d.getFullYear();
     }
 
     const today = getToday();
 
-    // UPDATED Voiding Template (FINAL)
+    // Email Bodies
     const voidingBody = encodeURIComponent(
 `Good day!
 
@@ -154,33 +164,38 @@ Best,
 [Name here]`
     );
 
-    // Apply Gmail & Mailto links
-    document.getElementById("voiding-mobile").href =
-      `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=PLB%20Voiding%20and%20Manual%20Redemption:%20[BUSINESS%20ACCOUNT%20NAME].%20${today}&body=${voidingBody}`;
+    // Create dynamic link generator
+    function updateLinks() {
+      const name = document.getElementById("accountName").value || "BUSINESS ACCOUNT NAME";
 
-    document.getElementById("voiding-desktop").href =
-      `mailto:plb-support@locq.com?subject=PLB%20Voiding%20and%20Manual%20Redemption:%20[BUSINESS%20ACCOUNT%20NAME].%20${today}&body=${voidingBody}`;
+      document.getElementById("voiding-mobile").href =
+        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=PLB Voiding and Manual Redemption: ${name}. ${today}&body=${voidingBody}`;
 
-    document.getElementById("lubes-mobile").href =
-      `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=PLB%20Lubes%20Processing:%20[BUSINESS%20ACCOUNT%20NAME].%20${today}&body=${lubesBody}`;
+      document.getElementById("voiding-desktop").href =
+        `mailto:plb-support@locq.com?subject=PLB Voiding and Manual Redemption: ${name}. ${today}&body=${voidingBody}`;
 
-    document.getElementById("lubes-desktop").href =
-      `mailto:plb-support@locq.com?subject=PLB%20Lubes%20Processing:%20[BUSINESS%20ACCOUNT%20NAME].%20${today}&body=${lubesBody}`;
+      document.getElementById("lubes-mobile").href =
+        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=PLB Lubes Processing: ${name}. ${today}&body=${lubesBody}`;
 
-    document.getElementById("fa-mobile").href =
-      `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=PLB%202FA%20Deactivation%20Assistance:%20[BUSINESS%20ACCOUNT%20NAME].%20${today}&body=${faBody}`;
+      document.getElementById("lubes-desktop").href =
+        `mailto:plb-support@locq.com?subject=PLB Lubes Processing: ${name}. ${today}&body=${lubesBody}`;
 
-    document.getElementById("fa-desktop").href =
-      `mailto:plb-support@locq.com?subject=PLB%202FA%20Deactivation%20Assistance:%20[BUSINESS%20ACCOUNT%20NAME].%20${today}&body=${faBody}`;
+      document.getElementById("fa-mobile").href =
+        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=PLB 2FA Deactivation Assistance: ${name}. ${today}&body=${faBody}`;
 
-    document.getElementById("general-mobile").href =
-      `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=Please%20replace%20this%20subject%20line&body=${generalBody}`;
+      document.getElementById("fa-desktop").href =
+        `mailto:plb-support@locq.com?subject=PLB 2FA Deactivation Assistance: ${name}. ${today}&body=${faBody}`;
 
-    document.getElementById("general-desktop").href =
-      `mailto:plb-support@locq.com?subject=Please%20replace%20this%20subject%20line&body=${generalBody}`;
+      document.getElementById("general-mobile").href =
+        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${name} - Concern&body=${generalBody}`;
+
+      document.getElementById("general-desktop").href =
+        `mailto:plb-support@locq.com?subject=${name} - Concern&body=${generalBody}`;
+    }
+
+    // Update links whenever user types a name
+    document.getElementById("accountName").addEventListener("input", updateLinks);
   </script>
 
 </body>
 </html>
-
-
