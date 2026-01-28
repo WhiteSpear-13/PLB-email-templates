@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>PLB Email Templates</title>
   <style>
     body {
@@ -10,9 +10,8 @@
       background: #f8f9fa;
       color: #333;
     }
-    h1 {
-      color: #222;
-    }
+    h1 { color: #222; }
+
     .template {
       background: #fff;
       padding: 1rem 1.5rem;
@@ -20,9 +19,9 @@
       border-radius: 10px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    .buttons {
-      margin-top: 1rem;
-    }
+
+    .buttons { margin-top: 1rem; }
+
     a {
       display: inline-block;
       margin-right: 0.5rem;
@@ -33,30 +32,42 @@
       font-size: 0.95rem;
       font-weight: bold;
     }
-    .mobile {
-      background: #28a745;
-      color: white;
-    }
-    .desktop {
-      background: #007bff;
-      color: white;
-    }
+
+    .mobile { background: #28a745; color: #fff; }
+    .desktop { background: #007bff; color: #fff; }
+
+    .field-wrap { margin-bottom: 1.25rem; }
+    label { display: block; font-weight: 700; margin-bottom: .5rem; }
+
     input {
-      padding: 8px;
+      padding: 10px;
       font-size: 1rem;
-      width: 320px;
-      margin-bottom: 1.5rem;
-      border-radius: 5px;
+      width: 520px;
+      max-width: 100%;
+      border-radius: 6px;
       border: 1px solid #ccc;
     }
+
+    .hint { font-size: .9rem; color: #666; margin-top: .35rem; }
+    .status { font-size: .9rem; margin-top: .35rem; }
   </style>
 </head>
 
 <body>
   <h1>📧 PLB Email Templates</h1>
 
-  <p><strong>Business Account Name (required for subject line):</strong></p>
-  <input type="text" id="accountName" placeholder="Enter Business Account Name">
+  <div class="field-wrap">
+    <label for="accountName">Business Account Name (required for subject line):</label>
+    <input
+      id="accountName"
+      list="accountList"
+      placeholder="Type to search or select your business name"
+      autocomplete="off"
+    />
+    <datalist id="accountList"></datalist>
+    <div class="hint">Tip: start typing to filter the list.</div>
+    <div id="loadStatus" class="status"></div>
+  </div>
 
   <p>Click the buttons below to open a ready-to-use email.</p>
 
@@ -106,6 +117,13 @@
   </div>
 
   <script>
+    // ========= CONFIG: Google Sheet source =========
+    const SHEET_ID = "1ua5EVn5R_tgl7WiwSanGMTJfym_S4Ra4YYT6gEn622I";
+    const SHEET_TAB_NAME = "Masterfile";
+    // ==============================================
+
+    const FALLBACK_ACCOUNT_NAMES = ["TEST"];
+
     function getToday() {
       const d = new Date();
       return String(d.getMonth() + 1).padStart(2, "0") +
@@ -115,6 +133,57 @@
 
     const today = getToday();
 
+    function setStatus(msg) {
+      document.getElementById("loadStatus").textContent = msg || "";
+    }
+
+    function populateDatalist(names) {
+      const datalist = document.getElementById("accountList");
+      datalist.innerHTML = "";
+
+      const uniq = Array.from(new Set(
+        (names || [])
+          .map(x => String(x || "").trim())
+          .filter(Boolean)
+      )).sort((a, b) => a.localeCompare(b));
+
+      for (const name of uniq) {
+        const opt = document.createElement("option");
+        opt.value = name;
+        datalist.appendChild(opt);
+      }
+
+      setStatus(`Loaded ${uniq.length} business account names.`);
+    }
+
+    function parseGviz(text) {
+      const match = text.match(/setResponse\\((.*)\\);?$/s);
+      if (!match || !match[1]) throw new Error("Unexpected GViz response.");
+      return JSON.parse(match[1]);
+    }
+
+    async function loadAccountNamesFromSheet() {
+      setStatus("Loading business account names from Google Sheet...");
+
+      // Column B = Business account name list
+      const query = encodeURIComponent("select B where B is not null");
+      const url =
+        `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?` +
+        `tqx=out:json&sheet=${encodeURIComponent(SHEET_TAB_NAME)}&tq=${query}`;
+
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error("Failed to fetch sheet data.");
+      const text = await res.text();
+
+      const data = parseGviz(text);
+      const rows = data?.table?.rows || [];
+      const names = rows.map(r => r?.c?.[0]?.v).filter(Boolean);
+
+      if (!names.length) throw new Error("No names found in sheet.");
+      populateDatalist(names);
+    }
+
+    // ✅ UPDATED BODIES: removed business/account name lines
     const cashInBody = encodeURIComponent(
 `Good day!
 
@@ -132,7 +201,6 @@ Kindly requesting Voiding and/or Manual Redemption for this transaction with the
 • Transaction ID:
 • Transaction Date:
 • Station Code:
-• Business Account Name:
 • Product:
 • Pump Price:
 • Wrong Liters:
@@ -149,7 +217,6 @@ Attached Receipt: [please see attachment]`
 
 Requesting PLB Lubes Processing Transaction Assistance with the following details:
 
-Account Name:
 Amount:
 Station Code (to be deducted):
 Station Name (to be deducted):`
@@ -161,7 +228,6 @@ Station Name (to be deducted):`
 Requesting your assistance for 2FA Deactivation with the following details:
 
 Name of Requestor:
-Business Account Name:
 User Email Address for 2FA Turn Off:`
     );
 
@@ -171,8 +237,6 @@ User Email Address for 2FA Turn Off:`
 Here are the details of my concern:
 Stakeholder Involved:
 Details:
-When/Where observed:
-Steps tried:
 Attachments:
 
 Thank you!
@@ -182,41 +246,54 @@ Best,
     );
 
     function updateLinks() {
-      const name = document.getElementById("accountName").value || "BUSINESS ACCOUNT NAME";
+      const raw = document.getElementById("accountName").value.trim();
+      const name = raw || "BUSINESS ACCOUNT NAME";
+
+      // ✅ Manual Cash In subject includes date AFTER business name
+      const cashInSubject = `Manual Cash In: ${name}. ${today}`;
 
       document.getElementById("cashin-gmail").href =
-        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=Manual Cash In: ${name}&body=${cashInBody}`;
-
+        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${encodeURIComponent(cashInSubject)}&body=${cashInBody}`;
       document.getElementById("cashin-mailto").href =
-        `mailto:plb-support@locq.com?subject=Manual Cash In: ${name}&body=${cashInBody}`;
+        `mailto:plb-support@locq.com?subject=${encodeURIComponent(cashInSubject)}&body=${cashInBody}`;
 
+      const voidingSubject = `PLB Voiding and Manual Redemption: ${name}. ${today}`;
       document.getElementById("voiding-gmail").href =
-        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=PLB Voiding and Manual Redemption: ${name}. ${today}&body=${voidingBody}`;
-
+        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${encodeURIComponent(voidingSubject)}&body=${voidingBody}`;
       document.getElementById("voiding-mailto").href =
-        `mailto:plb-support@locq.com?subject=PLB Voiding and Manual Redemption: ${name}. ${today}&body=${voidingBody}`;
+        `mailto:plb-support@locq.com?subject=${encodeURIComponent(voidingSubject)}&body=${voidingBody}`;
 
+      const lubesSubject = `PLB Lubes Processing: ${name}. ${today}`;
       document.getElementById("lubes-gmail").href =
-        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=PLB Lubes Processing: ${name}. ${today}&body=${lubesBody}`;
-
+        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${encodeURIComponent(lubesSubject)}&body=${lubesBody}`;
       document.getElementById("lubes-mailto").href =
-        `mailto:plb-support@locq.com?subject=PLB Lubes Processing: ${name}. ${today}&body=${lubesBody}`;
+        `mailto:plb-support@locq.com?subject=${encodeURIComponent(lubesSubject)}&body=${lubesBody}`;
 
+      const faSubject = `PLB 2FA Deactivation Assistance: ${name}. ${today}`;
       document.getElementById("fa-gmail").href =
-        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=PLB 2FA Deactivation Assistance: ${name}. ${today}&body=${faBody}`;
-
+        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${encodeURIComponent(faSubject)}&body=${faBody}`;
       document.getElementById("fa-mailto").href =
-        `mailto:plb-support@locq.com?subject=PLB 2FA Deactivation Assistance: ${name}. ${today}&body=${faBody}`;
+        `mailto:plb-support@locq.com?subject=${encodeURIComponent(faSubject)}&body=${faBody}`;
 
+      const generalSubject = `${name} - Concern`;
       document.getElementById("general-gmail").href =
-        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${name} - Concern&body=${generalBody}`;
-
+        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${encodeURIComponent(generalSubject)}&body=${generalBody}`;
       document.getElementById("general-mailto").href =
-        `mailto:plb-support@locq.com?subject=${name} - Concern&body=${generalBody}`;
+        `mailto:plb-support@locq.com?subject=${encodeURIComponent(generalSubject)}&body=${generalBody}`;
     }
 
     document.getElementById("accountName").addEventListener("input", updateLinks);
-  </script>
+    updateLinks();
 
+    (async () => {
+      try {
+        await loadAccountNamesFromSheet();
+      } catch (e) {
+        console.warn(e);
+        populateDatalist(FALLBACK_ACCOUNT_NAMES);
+        setStatus("Could not load from Google Sheet (permissions/offline). Using fallback list.");
+      }
+    })();
+  </script>
 </body>
 </html>
