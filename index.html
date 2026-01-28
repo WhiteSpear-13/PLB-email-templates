@@ -49,7 +49,7 @@
     }
 
     .hint { font-size: .9rem; color: #666; margin-top: .35rem; }
-    .status { font-size: .9rem; margin-top: .35rem; }
+    .status { font-size: .9rem; margin-top: .35rem; color: #444; }
   </style>
 </head>
 
@@ -117,19 +117,11 @@
   </div>
 
   <script>
-    // ========= CONFIG: Google Sheet source =========
-    const SHEET_ID = "1ua5EVn5R_tgl7WiwSanGMTJfym_S4Ra4YYT6gEn622I";
-    const SHEET_TAB_NAME = "Masterfile";
-    // ==============================================
-
-    const FALLBACK_ACCOUNT_NAMES = ["TEST"];
-
+    // ✅ Date format: "Jan 28, 2026"
     function getToday() {
       const d = new Date();
-      const options = { year: "numeric", month: "short", day: "2-digit" };
-      return d.toLocaleDateString("en-US", options);
-}
-
+      return d.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" });
+    }
     const today = getToday();
 
     function setStatus(msg) {
@@ -155,34 +147,23 @@
       setStatus(`Loaded ${uniq.length} business account names.`);
     }
 
-    function parseGviz(text) {
-      const match = text.match(/setResponse\\((.*)\\);?$/s);
-      if (!match || !match[1]) throw new Error("Unexpected GViz response.");
-      return JSON.parse(match[1]);
-    }
+    // ✅ Load names from JSON in the same repo
+    async function loadAccountNamesFromJson() {
+      setStatus("Loading business account names...");
+      const res = await fetch("./business_accounts.json", { cache: "no-store" });
+      if (!res.ok) throw new Error(`Could not load business_accounts.json (HTTP ${res.status})`);
 
-    async function loadAccountNamesFromSheet() {
-      setStatus("Loading business account names from Google Sheet...");
+      const data = await res.json();
+      const names = data?.business_account_names;
 
-      // Column B = Business account name list
-      const query = encodeURIComponent("select B where B is not null");
-      const url =
-        `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?` +
-        `tqx=out:json&sheet=${encodeURIComponent(SHEET_TAB_NAME)}&tq=${query}`;
+      if (!Array.isArray(names) || names.length === 0) {
+        throw new Error("business_accounts.json has no business_account_names array.");
+      }
 
-      const res = await fetch(url, { cache: "no-store" });
-      if (!res.ok) throw new Error("Failed to fetch sheet data.");
-      const text = await res.text();
-
-      const data = parseGviz(text);
-      const rows = data?.table?.rows || [];
-      const names = rows.map(r => r?.c?.[0]?.v).filter(Boolean);
-
-      if (!names.length) throw new Error("No names found in sheet.");
       populateDatalist(names);
     }
 
-    // ✅ UPDATED BODIES: removed business/account name lines
+    // ✅ Bodies (no business/account name inside body)
     const cashInBody = encodeURIComponent(
 `Good day!
 
@@ -248,7 +229,7 @@ Best,
       const raw = document.getElementById("accountName").value.trim();
       const name = raw || "BUSINESS ACCOUNT NAME";
 
-      // ✅ Manual Cash In subject includes date AFTER business name
+      // Manual Cash In includes date after business name
       const cashInSubject = `Manual Cash In: ${name}. ${today}`;
 
       document.getElementById("cashin-gmail").href =
@@ -281,19 +262,19 @@ Best,
         `mailto:plb-support@locq.com?subject=${encodeURIComponent(generalSubject)}&body=${generalBody}`;
     }
 
+    // Init
     document.getElementById("accountName").addEventListener("input", updateLinks);
     updateLinks();
 
+    // Load dropdown list
     (async () => {
       try {
-        await loadAccountNamesFromSheet();
+        await loadAccountNamesFromJson();
       } catch (e) {
-        console.warn(e);
-        populateDatalist(FALLBACK_ACCOUNT_NAMES);
-        setStatus("Could not load from Google Sheet (permissions/offline). Using fallback list.");
+        console.error(e);
+        setStatus("Could not load business_accounts.json. Please confirm it is in the same folder as index.html.");
       }
     })();
   </script>
 </body>
 </html>
-
