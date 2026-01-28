@@ -44,8 +44,8 @@
     input {
       padding: 8px;
       font-size: 1rem;
-      width: 300px;
-      margin-bottom: 1rem;
+      width: 320px;
+      margin-bottom: 1.5rem;
       border-radius: 5px;
       border: 1px solid #ccc;
     }
@@ -54,18 +54,27 @@
 
 <body>
   <h1>📧 PLB Email Templates</h1>
-  <p>Enter Business Account Name (required for subject line):</p>
 
+  <p><strong>Business Account Name (required for subject line):</strong></p>
   <input type="text" id="accountName" placeholder="Enter Business Account Name">
 
-  <p>Click the buttons below to open the email template.</p>
+  <p>Click the buttons below to open a ready-to-use email.</p>
 
-  <!-- Voiding Section -->
+  <!-- Manual Cash In (FIRST) -->
+  <div class="template">
+    <h2>Manual Cash In</h2>
+    <div class="buttons">
+      <a id="cashin-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
+      <a id="cashin-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
+    </div>
+  </div>
+
+  <!-- Voiding -->
   <div class="template">
     <h2>PLB Voiding and/or Manual Redemption</h2>
     <div class="buttons">
-      <a id="voiding-mobile" class="mobile" href="#">💻 Desktop (Gmail)</a>
-      <a id="voiding-desktop" class="desktop" href="#">📱 Mobile (Mailto)</a>
+      <a id="voiding-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
+      <a id="voiding-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
     </div>
   </div>
 
@@ -73,8 +82,8 @@
   <div class="template">
     <h2>PLB Lubes Processing</h2>
     <div class="buttons">
-      <a id="lubes-mobile" class="mobile" href="#">💻 Desktop (Gmail)</a>
-      <a id="lubes-desktop" class="desktop" href="#">📱 Mobile (Mailto)</a>
+      <a id="lubes-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
+      <a id="lubes-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
     </div>
   </div>
 
@@ -82,8 +91,8 @@
   <div class="template">
     <h2>PLB 2FA Deactivation Assistance</h2>
     <div class="buttons">
-      <a id="fa-mobile" class="mobile" href="#">💻 Desktop (Gmail)</a>
-      <a id="fa-desktop" class="desktop" href="#">📱 Mobile (Mailto)</a>
+      <a id="fa-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
+      <a id="fa-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
     </div>
   </div>
 
@@ -91,8 +100,8 @@
   <div class="template">
     <h2>General Concern</h2>
     <div class="buttons">
-      <a id="general-mobile" class="mobile" href="#">💻 Desktop (Gmail)</a>
-      <a id="general-desktop" class="desktop" href="#">📱 Mobile (Mailto)</a>
+      <a id="general-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
+      <a id="general-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
     </div>
   </div>
 
@@ -106,7 +115,15 @@
 
     const today = getToday();
 
-    // Email Bodies
+    const cashInBody = encodeURIComponent(
+`Good day!
+
+Requesting Manual Cash In Assistance with the following details:
+
+Amount:
+Attached Image:`
+    );
+
     const voidingBody = encodeURIComponent(
 `Good day!
 
@@ -152,9 +169,11 @@ User Email Address for 2FA Turn Off:`
 `Good day, PLB OPS Team!
 
 Here are the details of my concern:
-Stakeholder Involved: [account/client name]
-Details: [Brief explanation]
-Attachments: [if any]
+Stakeholder Involved:
+Details:
+When/Where observed:
+Steps tried:
+Attachments:
 
 Thank you!
 
@@ -162,39 +181,42 @@ Best,
 [Name here]`
     );
 
-    // Create dynamic link generator
     function updateLinks() {
       const name = document.getElementById("accountName").value || "BUSINESS ACCOUNT NAME";
 
-      document.getElementById("voiding-mobile").href =
+      document.getElementById("cashin-gmail").href =
+        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=Manual Cash In: ${name}&body=${cashInBody}`;
+
+      document.getElementById("cashin-mailto").href =
+        `mailto:plb-support@locq.com?subject=Manual Cash In: ${name}&body=${cashInBody}`;
+
+      document.getElementById("voiding-gmail").href =
         `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=PLB Voiding and Manual Redemption: ${name}. ${today}&body=${voidingBody}`;
 
-      document.getElementById("voiding-desktop").href =
+      document.getElementById("voiding-mailto").href =
         `mailto:plb-support@locq.com?subject=PLB Voiding and Manual Redemption: ${name}. ${today}&body=${voidingBody}`;
 
-      document.getElementById("lubes-mobile").href =
+      document.getElementById("lubes-gmail").href =
         `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=PLB Lubes Processing: ${name}. ${today}&body=${lubesBody}`;
 
-      document.getElementById("lubes-desktop").href =
+      document.getElementById("lubes-mailto").href =
         `mailto:plb-support@locq.com?subject=PLB Lubes Processing: ${name}. ${today}&body=${lubesBody}`;
 
-      document.getElementById("fa-mobile").href =
+      document.getElementById("fa-gmail").href =
         `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=PLB 2FA Deactivation Assistance: ${name}. ${today}&body=${faBody}`;
 
-      document.getElementById("fa-desktop").href =
+      document.getElementById("fa-mailto").href =
         `mailto:plb-support@locq.com?subject=PLB 2FA Deactivation Assistance: ${name}. ${today}&body=${faBody}`;
 
-      document.getElementById("general-mobile").href =
+      document.getElementById("general-gmail").href =
         `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${name} - Concern&body=${generalBody}`;
 
-      document.getElementById("general-desktop").href =
+      document.getElementById("general-mailto").href =
         `mailto:plb-support@locq.com?subject=${name} - Concern&body=${generalBody}`;
     }
 
-    // Update links whenever user types a name
     document.getElementById("accountName").addEventListener("input", updateLinks);
   </script>
 
 </body>
 </html>
-
