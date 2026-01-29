@@ -136,6 +136,9 @@
     }
     const today = getToday();
 
+    // ✅ Auto-CC for Manual Cash In
+    const MANUAL_CASHIN_CC = "mariaisabel.pabello@locq.com,julius.flores@locq.com";
+
     function setStatus(msg) {
       document.getElementById("loadStatus").textContent = msg || "";
     }
@@ -243,14 +246,21 @@ Thank you!`
     function updateLinks() {
       const name = document.getElementById("accountName").value.trim() || "BUSINESS ACCOUNT NAME";
 
-      const set = (id, subject, body) => {
+      const set = (id, subject, body, cc = "") => {
+        const ccGmail = cc ? `&cc=${encodeURIComponent(cc)}` : "";
+        const ccMailto = cc ? `&cc=${encodeURIComponent(cc)}` : "";
+
         document.getElementById(id + "-gmail").href =
-          `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${encodeURIComponent(subject)}&body=${body}`;
+          `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com${ccGmail}&su=${encodeURIComponent(subject)}&body=${body}`;
+
         document.getElementById(id + "-mailto").href =
-          `mailto:plb-support@locq.com?subject=${encodeURIComponent(subject)}&body=${body}`;
+          `mailto:plb-support@locq.com?subject=${encodeURIComponent(subject)}&body=${body}${ccMailto}`;
       };
 
-      set("cashin", `Manual Cash In: ${name}. ${today}`, cashInBody);
+      // Manual Cash In includes CC
+      set("cashin", `Manual Cash In: ${name}. ${today}`, cashInBody, MANUAL_CASHIN_CC);
+
+      // Others no CC
       set("vip", `VIP Redemption Data Report Request: ${name}. ${today}`, vipBody);
       set("voiding", `PLB Voiding and Manual Redemption: ${name}. ${today}`, voidingBody);
       set("lubes", `PLB Lubes Processing: ${name}. ${today}`, lubesBody);
