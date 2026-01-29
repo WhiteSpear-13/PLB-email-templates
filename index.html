@@ -71,7 +71,7 @@
 
   <p>Click the buttons below to open a ready-to-use email.</p>
 
-  <!-- Manual Cash In (FIRST) -->
+  <!-- Manual Cash In -->
   <div class="template">
     <h2>Manual Cash In</h2>
     <div class="buttons">
@@ -80,7 +80,7 @@
     </div>
   </div>
 
-  <!-- VIP Redemption Data Report (NEW) -->
+  <!-- VIP Redemption -->
   <div class="template">
     <h2>VIP Redemption Data Report Request</h2>
     <div class="buttons">
@@ -126,10 +126,13 @@
   </div>
 
   <script>
-    // ✅ Date format: "Jan 28, 2026"
     function getToday() {
       const d = new Date();
-      return d.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" });
+      return d.toLocaleDateString("en-US", {
+        month: "short",
+        day: "2-digit",
+        year: "numeric"
+      });
     }
     const today = getToday();
 
@@ -142,37 +145,24 @@
       datalist.innerHTML = "";
 
       const uniq = Array.from(new Set(
-        (names || [])
-          .map(x => String(x || "").trim())
-          .filter(Boolean)
+        names.map(n => n.trim()).filter(Boolean)
       )).sort((a, b) => a.localeCompare(b));
 
-      for (const name of uniq) {
+      uniq.forEach(name => {
         const opt = document.createElement("option");
         opt.value = name;
         datalist.appendChild(opt);
-      }
+      });
 
       setStatus(`Loaded ${uniq.length} business account names.`);
     }
 
-    // ✅ Load names from JSON in the same repo
     async function loadAccountNamesFromJson() {
-      setStatus("Loading business account names...");
       const res = await fetch("./business_accounts.json", { cache: "no-store" });
-      if (!res.ok) throw new Error(`Could not load business_accounts.json (HTTP ${res.status})`);
-
       const data = await res.json();
-      const names = data?.business_account_names;
-
-      if (!Array.isArray(names) || names.length === 0) {
-        throw new Error("business_accounts.json has no business_account_names array.");
-      }
-
-      populateDatalist(names);
+      populateDatalist(data.business_account_names);
     }
 
-    // ✅ Bodies (no business/account name inside body)
     const cashInBody = encodeURIComponent(
 `Good day!
 
@@ -187,8 +177,8 @@ ATTACHED IMAGE:`
 
 Requesting VIP Redemption Data Report with the following details:
 
-CASH IN ID:
-ATTACHED IMAGE:`
+Cash In ID:
+Attached Image:`
     );
 
     const voidingBody = encodeURIComponent(
@@ -244,63 +234,26 @@ Best,
     );
 
     function updateLinks() {
-      const raw = document.getElementById("accountName").value.trim();
-      const name = raw || "BUSINESS ACCOUNT NAME";
+      const name = document.getElementById("accountName").value.trim() || "BUSINESS ACCOUNT NAME";
 
-      // Manual Cash In includes date after business name
-      const cashInSubject = `Manual Cash In: ${name}. ${today}`;
+      const set = (id, subject, body) => {
+        document.getElementById(id + "-gmail").href =
+          `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${encodeURIComponent(subject)}&body=${body}`;
+        document.getElementById(id + "-mailto").href =
+          `mailto:plb-support@locq.com?subject=${encodeURIComponent(subject)}&body=${body}`;
+      };
 
-      document.getElementById("cashin-gmail").href =
-        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${encodeURIComponent(cashInSubject)}&body=${cashInBody}`;
-      document.getElementById("cashin-mailto").href =
-        `mailto:plb-support@locq.com?subject=${encodeURIComponent(cashInSubject)}&body=${cashInBody}`;
-
-      // VIP Redemption Data Report Request (NEW)
-      const vipSubject = `VIP Redemption Data Report Request: ${name}. ${today}`;
-
-      document.getElementById("vip-gmail").href =
-        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${encodeURIComponent(vipSubject)}&body=${vipBody}`;
-      document.getElementById("vip-mailto").href =
-        `mailto:plb-support@locq.com?subject=${encodeURIComponent(vipSubject)}&body=${vipBody}`;
-
-      const voidingSubject = `PLB Voiding and Manual Redemption: ${name}. ${today}`;
-      document.getElementById("voiding-gmail").href =
-        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${encodeURIComponent(voidingSubject)}&body=${voidingBody}`;
-      document.getElementById("voiding-mailto").href =
-        `mailto:plb-support@locq.com?subject=${encodeURIComponent(voidingSubject)}&body=${voidingBody}`;
-
-      const lubesSubject = `PLB Lubes Processing: ${name}. ${today}`;
-      document.getElementById("lubes-gmail").href =
-        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${encodeURIComponent(lubesSubject)}&body=${lubesBody}`;
-      document.getElementById("lubes-mailto").href =
-        `mailto:plb-support@locq.com?subject=${encodeURIComponent(lubesSubject)}&body=${lubesBody}`;
-
-      const faSubject = `PLB 2FA Deactivation Assistance: ${name}. ${today}`;
-      document.getElementById("fa-gmail").href =
-        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${encodeURIComponent(faSubject)}&body=${faBody}`;
-      document.getElementById("fa-mailto").href =
-        `mailto:plb-support@locq.com?subject=${encodeURIComponent(faSubject)}&body=${faBody}`;
-
-      const generalSubject = `${name} - Concern`;
-      document.getElementById("general-gmail").href =
-        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${encodeURIComponent(generalSubject)}&body=${generalBody}`;
-      document.getElementById("general-mailto").href =
-        `mailto:plb-support@locq.com?subject=${encodeURIComponent(generalSubject)}&body=${generalBody}`;
+      set("cashin", `Manual Cash In: ${name}. ${today}`, cashInBody);
+      set("vip", `VIP Redemption Data Report Request: ${name}. ${today}`, vipBody);
+      set("voiding", `PLB Voiding and Manual Redemption: ${name}. ${today}`, voidingBody);
+      set("lubes", `PLB Lubes Processing: ${name}. ${today}`, lubesBody);
+      set("fa", `PLB 2FA Deactivation Assistance: ${name}. ${today}`, faBody);
+      set("general", `${name} - Concern`, generalBody);
     }
 
-    // Init
     document.getElementById("accountName").addEventListener("input", updateLinks);
     updateLinks();
-
-    // Load dropdown list
-    (async () => {
-      try {
-        await loadAccountNamesFromJson();
-      } catch (e) {
-        console.error(e);
-        setStatus("Could not load business_accounts.json. Please confirm it is in the same folder as index.html.");
-      }
-    })();
+    loadAccountNamesFromJson();
   </script>
 </body>
 </html>
