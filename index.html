@@ -80,6 +80,15 @@
     </div>
   </div>
 
+  <!-- VIP Redemption Data Report (NEW) -->
+  <div class="template">
+    <h2>VIP Redemption Data Report Request</h2>
+    <div class="buttons">
+      <a id="vip-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
+      <a id="vip-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
+    </div>
+  </div>
+
   <!-- Voiding -->
   <div class="template">
     <h2>PLB Voiding and/or Manual Redemption</h2>
@@ -169,10 +178,17 @@
 
 Requesting Manual Cash In Assistance with the following details:
 
-Amount:
-Attached Image:
+AMOUNT:
+ATTACHED IMAGE:`
+    );
 
-Thank you!`
+    const vipBody = encodeURIComponent(
+`Good day!
+
+Requesting VIP Redemption Data Report with the following details:
+
+CASH IN ID:
+ATTACHED IMAGE:`
     );
 
     const voidingBody = encodeURIComponent(
@@ -191,9 +207,7 @@ Kindly requesting Voiding and/or Manual Redemption for this transaction with the
 • Correct Amount:
 • Reason:
 
-Attached Receipt: [please see attachment]
-
-Thank you!`
+Attached Receipt: [please see attachment]`
     );
 
     const lubesBody = encodeURIComponent(
@@ -201,13 +215,9 @@ Thank you!`
 
 Requesting PLB Lubes Processing Transaction Assistance with the following details:
 
-Amount:
-Station Code (to be deducted):
-Station Name (to be deducted):
-
-Thank you!
-
-Best Regards,`
+AMOUNT:
+STATION CODE (to be deducted):
+STATION NAME (to be deducted):`
     );
 
     const faBody = encodeURIComponent(
@@ -215,21 +225,21 @@ Best Regards,`
 
 Requesting your assistance for 2FA Deactivation with the following details:
 
-Name of Requestor:
-User Email Address for 2FA Turn Off:`
+NAME OF REQUESTOR:
+USER EMAIL ADDRESS FOR 2FA TURN OFF:`
     );
 
     const generalBody = encodeURIComponent(
 `Good day, PLB OPS Team!
 
 Here are the details of my concern:
-Stakeholder Involved:
-Details:
-Attachments:
+STAKEHOLDER INVOLVED:
+DETAILS:
+ATTACHMENTS:
 
 Thank you!
 
-Best Regards,
+Best,
 [Name here]`
     );
 
@@ -244,6 +254,14 @@ Best Regards,
         `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${encodeURIComponent(cashInSubject)}&body=${cashInBody}`;
       document.getElementById("cashin-mailto").href =
         `mailto:plb-support@locq.com?subject=${encodeURIComponent(cashInSubject)}&body=${cashInBody}`;
+
+      // VIP Redemption Data Report Request (NEW)
+      const vipSubject = `VIP Redemption Data Report Request: ${name}. ${today}`;
+
+      document.getElementById("vip-gmail").href =
+        `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com&su=${encodeURIComponent(vipSubject)}&body=${vipBody}`;
+      document.getElementById("vip-mailto").href =
+        `mailto:plb-support@locq.com?subject=${encodeURIComponent(vipSubject)}&body=${vipBody}`;
 
       const voidingSubject = `PLB Voiding and Manual Redemption: ${name}. ${today}`;
       document.getElementById("voiding-gmail").href =
@@ -286,4 +304,3 @@ Best Regards,
   </script>
 </body>
 </html>
-
