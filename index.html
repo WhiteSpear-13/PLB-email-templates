@@ -82,7 +82,7 @@
 
   <!-- VIP Redemption -->
   <div class="template">
-    <h2>VIP Redemption Data Report Request</h2>
+    <h2>PLB VIP Redemption Data Report Request</h2>
     <div class="buttons">
       <a id="vip-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
       <a id="vip-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
@@ -180,7 +180,7 @@ Thank you!`
     const vipBody = encodeURIComponent(
 `Good day!
 
-Requesting VIP Redemption Data Report with the following details:
+Requesting PLB VIP Redemption Data Report with the following details:
 
 Cash In ID:
 Attached Image:
@@ -261,7 +261,7 @@ Thank you!`
       set("cashin", `Manual Cash In: ${name}. ${today}`, cashInBody, MANUAL_CASHIN_CC);
 
       // Others no CC
-      set("vip", `VIP Redemption Data Report Request: ${name}. ${today}`, vipBody);
+      set("vip", `PLB VIP Redemption Data Report Request: ${name}. ${today}`, vipBody);
       set("voiding", `PLB Voiding and Manual Redemption: ${name}. ${today}`, voidingBody);
       set("lubes", `PLB Lubes Processing: ${name}. ${today}`, lubesBody);
       set("fa", `PLB 2FA Deactivation Assistance: ${name}. ${today}`, faBody);
@@ -274,3 +274,4 @@ Thank you!`
   </script>
 </body>
 </html>
+
