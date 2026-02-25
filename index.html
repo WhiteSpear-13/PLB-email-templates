@@ -80,6 +80,15 @@
     </div>
   </div>
 
+  <!-- 2307 -->
+  <div class="template">
+    <h2>2307</h2>
+    <div class="buttons">
+      <a id="2307-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
+      <a id="2307-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
+    </div>
+  </div>
+
   <!-- VIP Redemption -->
   <div class="template">
     <h2>PLB VIP Redemption Data Report Request</h2>
@@ -138,6 +147,7 @@
 
     // ✅ Auto-CC for Manual Cash In
     const MANUAL_CASHIN_CC = "mariaisabel.pabello@locq.com,julius.flores@locq.com";
+    const 2307_CC = "sarah.nualan@locq.com";
 
     function setStatus(msg) {
       document.getElementById("loadStatus").textContent = msg || "";
@@ -173,6 +183,20 @@ Requesting Manual Cash In Assistance with the following details:
 
 Amount:
 Attached Image:
+
+Thank you!`
+    );
+    
+    const 2307Body = encodeURIComponent(
+`Good day!
+
+Please convert the 2307 files into PDF format and rename the files as follows:
+
+If Monthly: BUSINESS NAME - COMPANY GROUP MMYYYY 
+(e.g.: ABC Company - SCI 012026)
+
+If Quarterly: BUSINESS NAME - COMPANY GROUP QQYYYY 
+(e.g.: ABC Company - SCI Q12026
 
 Thank you!`
     );
@@ -259,6 +283,7 @@ Thank you!`
 
       // Manual Cash In includes CC
       set("cashin", `Manual Cash In: ${name}. ${today}`, cashInBody, MANUAL_CASHIN_CC);
+      set("2307", `PLB 2307 Credit  Request: BUSINESS ACCOUNT NAME: ${name}. ${today}`, 2307Body, 2307_CC);
 
       // Others no CC
       set("vip", `PLB VIP Redemption Data Report Request: ${name}. ${today}`, vipBody);
@@ -274,4 +299,5 @@ Thank you!`
   </script>
 </body>
 </html>
+
 
