@@ -138,7 +138,9 @@ input {
 
 <script>
 
-// Date Format
+// =========================
+// DATE FORMAT
+// =========================
 function getToday() {
   return new Date().toLocaleDateString("en-US", {
     month: "short",
@@ -148,24 +150,25 @@ function getToday() {
 }
 const today = getToday();
 
-// CC emails
+// =========================
+// CC EMAILS
+// =========================
 const MANUAL_CASHIN_CC = "mariaisabel.pabello@locq.com,julius.flores@locq.com";
 const TEMPLATE_2307_CC = "sarah.nualan@locq.com";
 
-// Email Bodies
-const cashInBody = encodeURIComponent(
-`Good day!
+// =========================
+// EMAIL BODIES
+// =========================
+const cashInBody = encodeURIComponent(`Good day!
 
 Requesting Manual Cash In Assistance with the following details:
 
 Amount:
 Attached Image:
 
-Thank you!`
-);
+Thank you!`);
 
-const template2307Body = encodeURIComponent(
-`Good day!
+const template2307Body = encodeURIComponent(`Good day!
 
 Please convert the 2307 files into PDF format and rename the files as follows:
 
@@ -175,22 +178,18 @@ If Monthly: BUSINESS NAME - COMPANY GROUP MMYYYY
 If Quarterly: BUSINESS NAME - COMPANY GROUP QQYYYY 
 (e.g.: ABC Company - SCI Q12026)
 
-Thank you!`
-);
+Thank you!`);
 
-const vipBody = encodeURIComponent(
-`Good day!
+const vipBody = encodeURIComponent(`Good day!
 
 Requesting PLB VIP Redemption Data Report with the following details:
 
 Cash In ID:
 Attached Image:
 
-Thank you!`
-);
+Thank you!`);
 
-const voidingBody = encodeURIComponent(
-`Good day!
+const voidingBody = encodeURIComponent(`Good day!
 
 Kindly requesting Voiding and/or Manual Redemption for this transaction with the following details:
 
@@ -207,11 +206,9 @@ Kindly requesting Voiding and/or Manual Redemption for this transaction with the
 
 Attached Receipt: [please see attachment]
 
-Thank you!`
-);
+Thank you!`);
 
-const lubesBody = encodeURIComponent(
-`Good day!
+const lubesBody = encodeURIComponent(`Good day!
 
 Requesting PLB Lubes Processing Transaction Assistance with the following details:
 
@@ -219,46 +216,42 @@ Amount:
 Station Code (to be deducted):
 Station Name (to be deducted):
 
-Thank you!`
-);
+Thank you!`);
 
-const faBody = encodeURIComponent(
-`Good day!
+const faBody = encodeURIComponent(`Good day!
 
 Requesting your assistance for 2FA Deactivation with the following details:
 
 Name of Requestor:
 User Email Address for 2FA Turn Off:
 
-Thank you!`
-);
+Thank you!`);
 
-const generalBody = encodeURIComponent(
-`Good day, PLB OPS Team!
+const generalBody = encodeURIComponent(`Good day, PLB OPS Team!
 
 Here are the details of my concern:
 Stakeholder Involved:
 Details:
 Attachments:
 
-Thank you!`
-);
+Thank you!`);
 
-// Update Links
+// =========================
+// UPDATE EMAIL LINKS
+// =========================
 function updateLinks() {
 
   const name = document.getElementById("accountName").value.trim() || "BUSINESS ACCOUNT NAME";
 
   function set(id, subject, body, cc="") {
 
-    const ccGmail = cc ? `&cc=${encodeURIComponent(cc)}` : "";
-    const ccMailto = cc ? `&cc=${encodeURIComponent(cc)}` : "";
+    const ccParam = cc ? `&cc=${encodeURIComponent(cc)}` : "";
 
     document.getElementById(id + "-gmail").href =
-      `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com${ccGmail}&su=${encodeURIComponent(subject)}&body=${body}`;
+      `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com${ccParam}&su=${encodeURIComponent(subject)}&body=${body}`;
 
     document.getElementById(id + "-mailto").href =
-      `mailto:plb-support@locq.com?subject=${encodeURIComponent(subject)}&body=${body}${ccMailto}`;
+      `mailto:plb-support@locq.com?subject=${encodeURIComponent(subject)}&body=${body}${ccParam}`;
   }
 
   set("cashin", `Manual Cash In: ${name}. ${today}`, cashInBody, MANUAL_CASHIN_CC);
@@ -272,6 +265,35 @@ function updateLinks() {
 
 document.getElementById("accountName").addEventListener("input", updateLinks);
 updateLinks();
+
+// =========================
+// LOAD BUSINESS NAMES
+// =========================
+async function loadBusinessNames() {
+  try {
+    const response = await fetch("business_accounts.json");
+    const data = await response.json();
+
+    const datalist = document.getElementById("accountList");
+    datalist.innerHTML = "";
+
+    data.business_account_names.forEach(name => {
+      const option = document.createElement("option");
+      option.value = name;
+      datalist.appendChild(option);
+    });
+
+    document.getElementById("loadStatus").textContent =
+      `Loaded ${data.business_account_names.length} business account names.`;
+
+  } catch (error) {
+    document.getElementById("loadStatus").textContent =
+      "Could not load business account list.";
+    console.error(error);
+  }
+}
+
+loadBusinessNames();
 
 </script>
 
