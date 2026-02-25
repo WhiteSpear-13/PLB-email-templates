@@ -1,182 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>PLB Email Templates</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 2rem;
-      background: #f8f9fa;
-      color: #333;
-    }
-    h1 { color: #222; }
+<meta charset="UTF-8" />
+<title>PLB Email Templates</title>
 
-    .template {
-      background: #fff;
-      padding: 1rem 1.5rem;
-      margin-bottom: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 2rem;
+  background: #f8f9fa;
+  color: #333;
+}
+h1 { color: #222; }
 
-    .buttons { margin-top: 1rem; }
+.template {
+  background: #fff;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
 
-    a {
-      display: inline-block;
-      margin-right: 0.5rem;
-      margin-bottom: 0.5rem;
-      padding: 0.6rem 1.2rem;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: bold;
-    }
+.buttons { margin-top: 1rem; }
 
-    .mobile { background: #28a745; color: #fff; }
-    .desktop { background: #007bff; color: #fff; }
+a {
+  display: inline-block;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: bold;
+}
 
-    .field-wrap { margin-bottom: 1.25rem; }
-    label { display: block; font-weight: 700; margin-bottom: .5rem; }
+.mobile { background: #28a745; color: #fff; }
+.desktop { background: #007bff; color: #fff; }
 
-    input {
-      padding: 10px;
-      font-size: 1rem;
-      width: 520px;
-      max-width: 100%;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
+.field-wrap { margin-bottom: 1.25rem; }
+label { display: block; font-weight: 700; margin-bottom: .5rem; }
 
-    .hint { font-size: .9rem; color: #666; margin-top: .35rem; }
-    .status { font-size: .9rem; margin-top: .35rem; color: #444; }
-  </style>
+input {
+  padding: 10px;
+  font-size: 1rem;
+  width: 520px;
+  max-width: 100%;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.hint { font-size: .9rem; color: #666; margin-top: .35rem; }
+.status { font-size: .9rem; margin-top: .35rem; color: #444; }
+</style>
 </head>
 
 <body>
-  <h1>📧 PLB Email Templates</h1>
 
-  <div class="field-wrap">
-    <label for="accountName">Business Account Name (required for subject line):</label>
-    <input
-      id="accountName"
-      list="accountList"
-      placeholder="Type to search or select your business name"
-      autocomplete="off"
-    />
-    <datalist id="accountList"></datalist>
-    <div class="hint">Tip: start typing to filter the list.</div>
-    <div id="loadStatus" class="status"></div>
+<h1>📧 PLB Email Templates</h1>
+
+<div class="field-wrap">
+  <label for="accountName">Business Account Name (required for subject line):</label>
+  <input
+    id="accountName"
+    list="accountList"
+    placeholder="Type to search or select your business name"
+    autocomplete="off"
+  />
+  <datalist id="accountList"></datalist>
+  <div class="hint">Tip: start typing to filter the list.</div>
+  <div id="loadStatus" class="status"></div>
+</div>
+
+<p>Click the buttons below to open a ready-to-use email.</p>
+
+<!-- Manual Cash In -->
+<div class="template">
+  <h2>Manual Cash In</h2>
+  <div class="buttons">
+    <a id="cashin-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
+    <a id="cashin-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
   </div>
+</div>
 
-  <p>Click the buttons below to open a ready-to-use email.</p>
-
-  <!-- Manual Cash In -->
-  <div class="template">
-    <h2>Manual Cash In</h2>
-    <div class="buttons">
-      <a id="cashin-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
-      <a id="cashin-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
-    </div>
+<!-- 2307 -->
+<div class="template">
+  <h2>2307 Credit Request</h2>
+  <div class="buttons">
+    <a id="template2307-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
+    <a id="template2307-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
   </div>
+</div>
 
-  <!-- 2307 -->
-  <div class="template">
-    <h2>2307</h2>
-    <div class="buttons">
-      <a id="2307-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
-      <a id="2307-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
-    </div>
+<!-- VIP -->
+<div class="template">
+  <h2>PLB VIP Redemption Data Report Request</h2>
+  <div class="buttons">
+    <a id="vip-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
+    <a id="vip-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
   </div>
+</div>
 
-  <!-- VIP Redemption -->
-  <div class="template">
-    <h2>PLB VIP Redemption Data Report Request</h2>
-    <div class="buttons">
-      <a id="vip-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
-      <a id="vip-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
-    </div>
+<!-- Voiding -->
+<div class="template">
+  <h2>PLB Voiding and/or Manual Redemption</h2>
+  <div class="buttons">
+    <a id="voiding-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
+    <a id="voiding-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
   </div>
+</div>
 
-  <!-- Voiding -->
-  <div class="template">
-    <h2>PLB Voiding and/or Manual Redemption</h2>
-    <div class="buttons">
-      <a id="voiding-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
-      <a id="voiding-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
-    </div>
+<!-- Lubes -->
+<div class="template">
+  <h2>PLB Lubes Processing</h2>
+  <div class="buttons">
+    <a id="lubes-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
+    <a id="lubes-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
   </div>
+</div>
 
-  <!-- Lubes -->
-  <div class="template">
-    <h2>PLB Lubes Processing</h2>
-    <div class="buttons">
-      <a id="lubes-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
-      <a id="lubes-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
-    </div>
+<!-- 2FA -->
+<div class="template">
+  <h2>PLB 2FA Deactivation Assistance</h2>
+  <div class="buttons">
+    <a id="fa-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
+    <a id="fa-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
   </div>
+</div>
 
-  <!-- 2FA -->
-  <div class="template">
-    <h2>PLB 2FA Deactivation Assistance</h2>
-    <div class="buttons">
-      <a id="fa-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
-      <a id="fa-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
-    </div>
+<!-- General -->
+<div class="template">
+  <h2>General Concern</h2>
+  <div class="buttons">
+    <a id="general-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
+    <a id="general-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
   </div>
+</div>
 
-  <!-- General -->
-  <div class="template">
-    <h2>General Concern</h2>
-    <div class="buttons">
-      <a id="general-gmail" class="mobile" href="#">💻 Desktop (Gmail)</a>
-      <a id="general-mailto" class="desktop" href="#">📱 Mobile (Mailto)</a>
-    </div>
-  </div>
+<script>
 
-  <script>
-    function getToday() {
-      const d = new Date();
-      return d.toLocaleDateString("en-US", {
-        month: "short",
-        day: "2-digit",
-        year: "numeric"
-      });
-    }
-    const today = getToday();
+// Date Format
+function getToday() {
+  return new Date().toLocaleDateString("en-US", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric"
+  });
+}
+const today = getToday();
 
-    // ✅ Auto-CC for Manual Cash In
-    const MANUAL_CASHIN_CC = "mariaisabel.pabello@locq.com,julius.flores@locq.com";
-    const TEMPLATE_2307_CC = "sarah.nualan@locq.com";
+// CC emails
+const MANUAL_CASHIN_CC = "mariaisabel.pabello@locq.com,julius.flores@locq.com";
+const TEMPLATE_2307_CC = "sarah.nualan@locq.com";
 
-    function setStatus(msg) {
-      document.getElementById("loadStatus").textContent = msg || "";
-    }
-
-    function populateDatalist(names) {
-      const datalist = document.getElementById("accountList");
-      datalist.innerHTML = "";
-
-      const uniq = Array.from(new Set(
-        names.map(n => n.trim()).filter(Boolean)
-      )).sort((a, b) => a.localeCompare(b));
-
-      uniq.forEach(name => {
-        const opt = document.createElement("option");
-        opt.value = name;
-        datalist.appendChild(opt);
-      });
-
-      setStatus(`Loaded ${uniq.length} business account names.`);
-    }
-
-    async function loadAccountNamesFromJson() {
-      const res = await fetch("./business_accounts.json", { cache: "no-store" });
-      const data = await res.json();
-      populateDatalist(data.business_account_names);
-    }
-
-    const cashInBody = encodeURIComponent(
+// Email Bodies
+const cashInBody = encodeURIComponent(
 `Good day!
 
 Requesting Manual Cash In Assistance with the following details:
@@ -185,9 +162,9 @@ Amount:
 Attached Image:
 
 Thank you!`
-    );
-    
-    const template2307Body = encodeURIComponent(
+);
+
+const template2307Body = encodeURIComponent(
 `Good day!
 
 Please convert the 2307 files into PDF format and rename the files as follows:
@@ -196,12 +173,12 @@ If Monthly: BUSINESS NAME - COMPANY GROUP MMYYYY
 (e.g.: ABC Company - SCI 012026)
 
 If Quarterly: BUSINESS NAME - COMPANY GROUP QQYYYY 
-(e.g.: ABC Company - SCI Q12026
+(e.g.: ABC Company - SCI Q12026)
 
 Thank you!`
-    );
+);
 
-    const vipBody = encodeURIComponent(
+const vipBody = encodeURIComponent(
 `Good day!
 
 Requesting PLB VIP Redemption Data Report with the following details:
@@ -210,9 +187,9 @@ Cash In ID:
 Attached Image:
 
 Thank you!`
-    );
+);
 
-    const voidingBody = encodeURIComponent(
+const voidingBody = encodeURIComponent(
 `Good day!
 
 Kindly requesting Voiding and/or Manual Redemption for this transaction with the following details:
@@ -231,9 +208,9 @@ Kindly requesting Voiding and/or Manual Redemption for this transaction with the
 Attached Receipt: [please see attachment]
 
 Thank you!`
-    );
+);
 
-    const lubesBody = encodeURIComponent(
+const lubesBody = encodeURIComponent(
 `Good day!
 
 Requesting PLB Lubes Processing Transaction Assistance with the following details:
@@ -243,9 +220,9 @@ Station Code (to be deducted):
 Station Name (to be deducted):
 
 Thank you!`
-    );
+);
 
-    const faBody = encodeURIComponent(
+const faBody = encodeURIComponent(
 `Good day!
 
 Requesting your assistance for 2FA Deactivation with the following details:
@@ -254,9 +231,9 @@ Name of Requestor:
 User Email Address for 2FA Turn Off:
 
 Thank you!`
-    );
+);
 
-    const generalBody = encodeURIComponent(
+const generalBody = encodeURIComponent(
 `Good day, PLB OPS Team!
 
 Here are the details of my concern:
@@ -265,40 +242,38 @@ Details:
 Attachments:
 
 Thank you!`
-    );
+);
 
-    function updateLinks() {
-      const name = document.getElementById("accountName").value.trim() || "BUSINESS ACCOUNT NAME";
+// Update Links
+function updateLinks() {
 
-      const set = (id, subject, body, cc = "") => {
-        const ccGmail = cc ? `&cc=${encodeURIComponent(cc)}` : "";
-        const ccMailto = cc ? `&cc=${encodeURIComponent(cc)}` : "";
+  const name = document.getElementById("accountName").value.trim() || "BUSINESS ACCOUNT NAME";
 
-        document.getElementById(id + "-gmail").href =
-          `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com${ccGmail}&su=${encodeURIComponent(subject)}&body=${body}`;
+  function set(id, subject, body, cc="") {
 
-        document.getElementById(id + "-mailto").href =
-          `mailto:plb-support@locq.com?subject=${encodeURIComponent(subject)}&body=${body}${ccMailto}`;
-      };
+    const ccGmail = cc ? `&cc=${encodeURIComponent(cc)}` : "";
+    const ccMailto = cc ? `&cc=${encodeURIComponent(cc)}` : "";
 
-      // Manual Cash In includes CC
-      set("cashin", `Manual Cash In: ${name}. ${today}`, cashInBody, MANUAL_CASHIN_CC);
-      set("2307", `PLB 2307 Credit Request: ${name}. ${today}`, 2307Body, 2307_CC);
+    document.getElementById(id + "-gmail").href =
+      `https://mail.google.com/mail/?view=cm&fs=1&to=plb-support@locq.com${ccGmail}&su=${encodeURIComponent(subject)}&body=${body}`;
 
-      // Others no CC
-      set("vip", `PLB VIP Redemption Data Report Request: ${name}. ${today}`, vipBody);
-      set("voiding", `PLB Voiding and Manual Redemption: ${name}. ${today}`, voidingBody);
-      set("lubes", `PLB Lubes Processing: ${name}. ${today}`, lubesBody);
-      set("fa", `PLB 2FA Deactivation Assistance: ${name}. ${today}`, faBody);
-      set("general", `${name} - Concern`, generalBody);
-    }
+    document.getElementById(id + "-mailto").href =
+      `mailto:plb-support@locq.com?subject=${encodeURIComponent(subject)}&body=${body}${ccMailto}`;
+  }
 
-    document.getElementById("accountName").addEventListener("input", updateLinks);
-    updateLinks();
-    loadAccountNamesFromJson();
-  </script>
+  set("cashin", `Manual Cash In: ${name}. ${today}`, cashInBody, MANUAL_CASHIN_CC);
+  set("template2307", `PLB 2307 Credit Request: ${name}. ${today}`, template2307Body, TEMPLATE_2307_CC);
+  set("vip", `PLB VIP Redemption Data Report Request: ${name}. ${today}`, vipBody);
+  set("voiding", `PLB Voiding and Manual Redemption: ${name}. ${today}`, voidingBody);
+  set("lubes", `PLB Lubes Processing: ${name}. ${today}`, lubesBody);
+  set("fa", `PLB 2FA Deactivation Assistance: ${name}. ${today}`, faBody);
+  set("general", `${name} - Concern`, generalBody);
+}
+
+document.getElementById("accountName").addEventListener("input", updateLinks);
+updateLinks();
+
+</script>
+
 </body>
 </html>
-
-
-
