@@ -147,7 +147,7 @@
 
     // ✅ Auto-CC for Manual Cash In
     const MANUAL_CASHIN_CC = "mariaisabel.pabello@locq.com,julius.flores@locq.com";
-    const 2307_CC = "sarah.nualan@locq.com";
+    const TEMPLATE_2307_CC = "sarah.nualan@locq.com";
 
     function setStatus(msg) {
       document.getElementById("loadStatus").textContent = msg || "";
@@ -187,7 +187,7 @@ Attached Image:
 Thank you!`
     );
     
-    const 2307Body = encodeURIComponent(
+    const template2307Body = encodeURIComponent(
 `Good day!
 
 Please convert the 2307 files into PDF format and rename the files as follows:
@@ -283,7 +283,7 @@ Thank you!`
 
       // Manual Cash In includes CC
       set("cashin", `Manual Cash In: ${name}. ${today}`, cashInBody, MANUAL_CASHIN_CC);
-      set("2307", `PLB 2307 Credit  Request: BUSINESS ACCOUNT NAME: ${name}. ${today}`, 2307Body, 2307_CC);
+      set("2307", `PLB 2307 Credit Request: ${name}. ${today}`, 2307Body, 2307_CC);
 
       // Others no CC
       set("vip", `PLB VIP Redemption Data Report Request: ${name}. ${today}`, vipBody);
@@ -299,5 +299,6 @@ Thank you!`
   </script>
 </body>
 </html>
+
 
 
